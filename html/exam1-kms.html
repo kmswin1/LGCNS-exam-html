@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Employee Management System</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style media="screen">
+      h1{
+        font-style: italic;
+        font-size: 50px;
+        padding-bottom: 20px;
+        margin-bottom: 40px;
+      }
+      li{
+        font-size: 20px;
+      }
+    </style>
+    <script type="text/javascript">
+
+    var currentUser;
+
+    var CurrentUserIdx;
+
+    var EmployeeList = [];
+
+    function logIn() {
+      temp = $('#employeeId').val();
+      for (var i=0; i<EmployeeList.length; i++) {
+        if (EmployeeList[i].id === temp) {
+            currentUser = temp;
+            currentUserIdx = i;
+        }
+      }
+    }
+
+    function logOut() {
+      currentUser = undefined;
+      document.getElementById('user').innerHTML = "로그아웃 되었습니다.";
+    }
+
+    function userInfo() {
+        if (currentUser === undefined){
+            document.getElementById('user').innerHTML = "등록되지 않은 사원입니다.";
+            return;
+        }
+          document.getElementById('user').innerHTML = "login : " + currentUser;
+    }
+
+    function inTime() {
+      if (currentUser === undefined) {
+          document.getElementById('in').innerHTML = "로그인이 필요합니다.";
+          return;
+      }
+
+      var date = new Date();
+      document.getElementById('in').innerHTML = "출근시간 : " + date.toUTCString();
+      EmployeeList[currentUserIdx].inTime = date;
+    }
+
+    function outTime() {
+      if (currentUser === undefined) {
+          document.getElementById('out').innerHTML = "로그인이 필요합니다.";
+          return;
+      }
+
+      var date = new Date();
+      document.getElementById('out').innerHTML = "퇴근시간 : " + date.toUTCString();
+      EmployeeList[currentUserIdx].outTime = date;
+    }
+
+    function createEmployee() {
+      var userId = $('#createId').val();
+      var userName = $('#createName').val();
+      var userInTime = "출근 정보 없음";
+      var userOutTime = "퇴근 정보 없음";
+      Employee = {id: userId, name: userName, inTime: userInTime,outTime: userOutTime};
+      EmployeeList.push(Employee);
+        document.getElementById('viewInfo').innerHTML = "이름 : " + userName + " 사번 : " + userId + " 이 등록되었습니다.";
+    }
+
+    function searchEmployee() {
+      var currentId = $('#readId').val();
+      for (var i=0; i<EmployeeList.length; i++) {
+        if (EmployeeList[i].id === currentId) {
+          document.getElementById('viewInfo').innerHTML = "이름 : " + EmployeeList[i].name + " 사번 : " + EmployeeList[i].id + "<br>" +
+          "출근시간 : " + EmployeeList[i].inTime +  "<br>" + "퇴근시간 : " + EmployeeList[i].outTime;
+          return;
+        }
+      }
+      document.getElementById('viewInfo').innerHTML = "등록된 사원이 아닙니다.";
+    }
+
+    function deleteEmployee() {
+      var currentId = $('#deleteId').val();
+      for (var i=0; i<EmployeeList.length; i++) {
+        if (EmployeeList[i].id === currentId) {
+          document.getElementById('viewInfo').innerHTML = "이름 : " + EmployeeList[i].name + " 사번 : " + EmployeeList[i].id + " 이 삭제되었습니다.";
+          EmployeeList.pop(i);
+          return;
+        }
+      }
+      document.getElementById('viewInfo').innerHTML = "등록된 사원이 아닙니다.";
+    }
+
+        function readAllEmployee() {
+          var all = "";
+          for (var i=0; i<EmployeeList.length; i++) {
+              all += "이름 : " + EmployeeList[i].name + " 사번 : " + EmployeeList[i].id +"<br>"+ "출근시간 : " + EmployeeList[i].inTime +  "<br>" + "퇴근시간 : " + EmployeeList[i].outTime + "<br>";
+              all += "<br>"
+            }
+            document.getElementById('viewInfo').innerHTML = all;
+          }
+    </script>
+  </head>
+  <body>
+    <nav>
+      <h1>Employee Management System</h1>
+
+      <h5 id = "user"></h5>
+      <div class="logIn">
+        <input type="text" id = "employeeId"><br>
+        <button type="button" name="logInButton" onclick = "logIn(); userInfo();"> logIn </button>
+        <button type="button" name="logOutButton" onclick = "logOut();"> logOut </button>
+      </div>
+      </nav>
+      <div class = "commute"><br>
+        <div id ="gotoWork">
+          <button type="button" name="goButton" onclick = "inTime()">출근</button>
+          <p id = "in">출근시간 : </p>
+        </div>
+        <div id ="leaveWork">
+          <button type="button" name="leaveButton" onclick = "outTime()">퇴근</button>
+          <p id = "out">퇴근시간 : </p>
+        </div>
+      </div>
+
+      <div class="employee">
+        <h3>인사기록</h3>
+        <div id = "create">
+          <input type="text" id ="createName"> 이름 <br>
+          <input type="text" id ="createId"> 사번 <br>
+          <button type="button" name="createButton" onclick="createEmployee()">등록</button>
+        </div>
+
+        <div id = "read">
+          <input type="text" id ="readId"> 사번 <br>
+          <button type="button" name="readButton" onclick="searchEmployee()">조회</button>
+        </div>
+
+        <div id = "delete">
+          <input type="text" id ="deleteId"> 사번 <br>
+          <button type="button" name="deleteButton" onclick="deleteEmployee()">삭제</button>
+        </div>
+      </div>
+
+  </body>
+  <footer>
+    <div class="view">
+      <h5 id = "viewInfo"></h5>
+        <button type="button" id ="all" onclick = "readAllEmployee()">전체 사원 정보 조회</button>
+  </div>
+    <img src="../resources/lgcns.png" width="400" align = "right">
+  </footer>
+</html>
