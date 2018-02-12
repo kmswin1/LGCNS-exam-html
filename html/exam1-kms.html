@@ -19,9 +19,9 @@
 
     var currentUser;
 
-    var CurrentUserIdx;
+    var currentUserIdx;
 
-    var EmployeeList = [];
+    var employeeList = [];
 
     function logIn() {
       temp = $('#employeeId').val();
@@ -29,6 +29,7 @@
         if (EmployeeList[i].id === temp) {
             currentUser = temp;
             currentUserIdx = i;
+          return;
         }
       }
     }
@@ -95,7 +96,7 @@
       for (var i=0; i<EmployeeList.length; i++) {
         if (EmployeeList[i].id === currentId) {
           document.getElementById('viewInfo').innerHTML = "이름 : " + EmployeeList[i].name + " 사번 : " + EmployeeList[i].id + " 이 삭제되었습니다.";
-          EmployeeList.pop(i);
+          EmployeeList.pop();
           return;
         }
       }
